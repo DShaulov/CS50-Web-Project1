@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug import generate_password_hash, check_password_hash
 
+
 app = Flask(__name__)
 
 
