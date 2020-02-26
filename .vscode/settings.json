@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "d88oobt5q6ppat",
+            "dialect": "PostgreSQL",
+            "name": "Project1",
+            "password": "b0c038bec42ebc57dc2b89fb87447625e20ffd4e7eb5e2589831e7910ae84258",
+            "port": 5432,
+            "server": "ec2-54-247-125-38.eu-west-1.compute.amazonaws.com",
+            "username": "xgqjlgqhllptkx"
+        }
+    ]
+}

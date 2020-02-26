@@ -1,0 +1,17 @@
+p {
+    color: red;
+    text-align: center;
+}
+
+.navbar-custom {
+    background-color: #e6ac00;
+}
+
+body {
+    background-color: bisque;
+}
+
+.searchbar {
+    text-align: center;
+}
+

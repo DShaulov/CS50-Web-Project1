@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register For My Sick Website Man
+{% endblock %}
+
+{% block body %}
+    <div class="form-group">
+        <form action="{{ url_for('register')}}"  method="POST" onsubmit="return checkUser()">
+            <br>
+            <label for="username" class="label-control offset-4">Username</label>
+            <br>
+            <input type="text" class="form-input col-4 offset-4" id="username" autocomplete="off" name="username">
+            <p id="userError" hidden="true">*username cant be empty</p>
+            <br>
+            <label for="password" class="offset-4">Password</label>
+            <br>
+            <input type="password" class="form-password col-4 offset-4" id="password" name="password">
+            <p id="passwordError" hidden="true">*password cant be empty</p>
+            <br>
+            <label for="password" class="offset-4">Password(again)</label>
+            <br>
+            <input type="password" class="form-password col-4 offset-4" id="confirmation">
+            <p id="confirmationError" hidden="true">*password cant be empty</p>
+            <p id="matchError" hidden="true">*passwords dont match</p>
+            <br><br>
+            <input type="submit" class="form-control col-2 offset-5 custom-form" value="Register" style="background-color: blue; color: white   ;">
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        function checkUser(){
+            console.log("The value is: " + document.getElementById("username").value)
+            if (document.getElementById("username").value == "") {
+                document.getElementById("userError").hidden = false;
+                return false;
+            }
+
+            if (document.getElementById("password").value == "") {
+                document.getElementById("passwordError").hidden = false;
+                return false;
+            }
+
+            if (document.getElementById("confirmation").value == "") {
+                document.getElementById("confirmationError").hidden = false;
+                return false;
+            }
+
+            if(document.getElementById("password").value != document.getElementById("confirmation").value) {
+                document.getElementById("matchError").hidden = false;
+                return false;
+            }
+
+            
+
+        }
+    
+    </script> 
+{% endblock %}
+
+
+
