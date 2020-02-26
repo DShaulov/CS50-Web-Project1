@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -41,7 +41,18 @@ def register():
             hashedPass = generate_password_hash(request.form.get("password"))
             db.execute("INSERT INTO USERS (USERNAME, HASH) VALUES (:USERNAME, :HASH)", {"USERNAME": username, "HASH": hashedPass})
             db.commit()
+            return redirect("/")
         else:
             message = "*username already taken"
-            return render_template("register.html")
-        return "Cool it posted!"
+            return render_template("register.html", message=message)
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    if request.method == "POST":
+        return ":)"
+
+@app.route("/logout")
+def logout():
+    return ":)"
