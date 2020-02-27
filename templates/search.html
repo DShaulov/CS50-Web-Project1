@@ -6,12 +6,14 @@
 
 {% block body %}
     <div class="col-4 offset-4">
+        <br>
+        <h5 style="text-align: center; color: green;">{{ thankyou }}</h5>
         <form action="{{ url_for('search') }}" method="POST" onsubmit="return checkSearch()">
             <br>
             <p class="error" hidden="true" id="searchError">*search field cannot be empty</p>
             <input type="text" class="form-control" name="search" id="search" style="text-align: center;">
             <br>
-            <input type="submit" value="Search" class="form-control col-2 offset-5">
+            <input type="submit" class="form-control col-2 offset-5 custom-form" value="Search" style="background-color: blue; color: white   ;">
         </form>
     </div>
 

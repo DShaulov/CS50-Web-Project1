@@ -26,3 +26,10 @@ function checkSearch() {
         return false;
     }
 }
+
+function reviewCheck() {
+    if (document.getElementById('review').value == "" ){
+        document.getElementById('reviewError').hidden = false;
+        return false;
+    }
+}

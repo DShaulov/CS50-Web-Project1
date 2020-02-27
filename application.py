@@ -89,11 +89,26 @@ def search():
         print(dbQuery)
         return render_template("search.html", dbQuery=dbQuery)
 
-@app.route("/books/<string:book>")
+@app.route("/books/<string:book>", methods=['GET', 'POST'])
 def books(book):
-    bookName = book
-    details = db.execute("SELECT * FROM books WHERE title = :title", {"title": bookName}).fetchall()
-    isbn = db.execute("SELECT isbn FROM books WHERE title = :title", {"title": bookName}).fetchall()
-    ratings = grRequest(isbn[0][0])
-    print(ratings)
-    return render_template("books.html", details=details, ratings=ratings)
+    if request.method == "GET":
+        bookName = book
+        details = db.execute("SELECT * FROM books WHERE title = :title", {"title": bookName}).fetchall()
+        isbn = db.execute("SELECT isbn FROM books WHERE title = :title", {"title": bookName}).fetchall()
+        ratings = grRequest(isbn[0][0])
+        print(ratings)
+        return render_template("books.html", details=details, ratings=ratings)
+
+    if request.method == "POST":
+        return render_template("review.html")
+
+@app.route("/review", methods=["POST", "GET"])
+def review():
+    if request.method == "GET":
+        return render_template("review.html")
+
+    if request.method == "POST":
+        print("The form content is: " + request.form.get("review"))
+        print("The rating is: " + request.form.get('rating'))
+        thankyou = "Thank you for submitting a review"
+        return render_template("search.html", thankyou=thankyou)
