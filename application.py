@@ -27,7 +27,8 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return render_template("frontpage.html")
+    sessionCheck = session
+    return render_template("frontpage.html", sessionCheck=sessionCheck)
 
 @app.route("/register", methods = ["GET", "POST"])
 def register():
@@ -52,8 +53,24 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
     if request.method == "POST":
-        return ":)"
+        username = request.form.get("username")
+        password = request.form.get("password")
+        userCheck = db.execute("SELECT * FROM users WHERE username=:username", {"username": username}).fetchall()
+        print(userCheck)
+        if userCheck == []:
+            errormessage = "*username or password dont match"
+            return render_template("login.html", errormessage=errormessage)
+
+        if not check_password_hash(userCheck[0][2], password):
+            errormessage = "*username or password dont match"
+            return render_template("login.html", errormessage=errormessage)
+
+        userId = userCheck[0][0]
+        session["user_id"] = userId
+        print(session["user_id"])
+        return redirect("/")
 
 @app.route("/logout")
 def logout():
-    return ":)"
+    session.clear()
+    return redirect("/")

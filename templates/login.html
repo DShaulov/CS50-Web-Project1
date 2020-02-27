@@ -5,6 +5,7 @@
 {% block body %}
     <div class="form-group">
         <form action="{{ url_for('login')}}"  method="POST" onsubmit="return checkUser()">
+            <p style="margin-top: 3%;">{{ errormessage }}</p>
             <br>
             <label for="username" class="label-control offset-4">Username</label>
             <br>
