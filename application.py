@@ -25,11 +25,6 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 
-@app.route("/")
-def index():
-    sessionCheck = session
-    return render_template("frontpage.html", sessionCheck=sessionCheck)
-
 @app.route("/register", methods = ["GET", "POST"])
 def register():
     if request.method == "GET":
@@ -48,10 +43,15 @@ def register():
             message = "*username already taken"
             return render_template("register.html", message=message)
 
+@app.route("/")
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "GET":
-        return render_template("login.html")
+        if session == {}:
+            sessionCheck = session
+            return render_template("login.html", sessionCheck=sessionCheck)
+        else:
+            return redirect("/search")
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -74,3 +74,7 @@ def login():
 def logout():
     session.clear()
     return redirect("/")
+
+@app.route("/search", methods=["POST", "GET"])
+def search():
+    return render_template("search.html")
