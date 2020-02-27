@@ -5,6 +5,7 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug import generate_password_hash, check_password_hash
+from helpers import capitalizeAll
 
 
 app = Flask(__name__)
@@ -77,4 +78,13 @@ def logout():
 
 @app.route("/search", methods=["POST", "GET"])
 def search():
-    return render_template("search.html")
+    if request.method == "GET":
+        return render_template("search.html")
+
+    if request.method == "POST":
+        searchParam = request.form.get("search")
+        searchParam = capitalizeAll(searchParam)
+        dbQuery = db.execute("SELECT title,author FROM books WHERE title LIKE :searchParam OR author LIKE :searchParam OR isbn LIKE :searchParam",
+                            {"searchParam": "%"+searchParam+"%"}).fetchall()
+        print(dbQuery)
+        return render_template("search.html", dbQuery=dbQuery)

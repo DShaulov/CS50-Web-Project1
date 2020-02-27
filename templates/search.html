@@ -5,5 +5,37 @@
 {% endblock %}
 
 {% block body %}
-    
+    <div class="col-4 offset-4">
+        <form action="{{ url_for('search') }}" method="POST" onsubmit="return checkSearch()">
+            <br>
+            <p class="error" hidden="true" id="searchError">*search field cannot be empty</p>
+            <input type="text" class="form-control" name="search" id="search">
+            <br>
+            <input type="submit" value="Search" class="form-control col-2 offset-5">
+        </form>
+    </div>
+
+
+{% if dbQuery == [] %}
+    <br>
+    <div class="col-4 offset-4 searchResults">
+        <p>No matches found</p>
+    </div>
+{% endif %}
+
+{% if dbQuery != [] %}
+    <br>
+    <div class="col-4 offset-4 searchResults">
+        {% for entry in dbQuery %}
+            <p>{{ entry[0] }}</p>
+            <p>By {{ entry[1] }}</p>
+            <br>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='javascript/script.js') }}"></script>
 {% endblock %}
