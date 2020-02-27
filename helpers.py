@@ -1,3 +1,5 @@
+import requests
+
 def capitalizeAll(x):
     x = x.capitalize()
     for i in range(len(x)):
@@ -9,6 +11,13 @@ def capitalizeAll(x):
 
     return x
 
-if __name__ == "__main__":
-    print(capitalizeAll("harlan cobanchekc123123123123"))
+
+def grRequest(isbn):
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                         params={"key": "3N1dZFOFzAAu9E7xnFCzPQ", "isbns": isbn})
+    reviewDetails = []
+    reviewDetails.append(res.json()['books'][0]['ratings_count'])
+    reviewDetails.append(res.json()['books'][0]['average_rating'])
+
+    return reviewDetails
 

@@ -9,7 +9,7 @@
         <form action="{{ url_for('search') }}" method="POST" onsubmit="return checkSearch()">
             <br>
             <p class="error" hidden="true" id="searchError">*search field cannot be empty</p>
-            <input type="text" class="form-control" name="search" id="search">
+            <input type="text" class="form-control" name="search" id="search" style="text-align: center;">
             <br>
             <input type="submit" value="Search" class="form-control col-2 offset-5">
         </form>
@@ -27,7 +27,7 @@
     <br>
     <div class="col-4 offset-4 searchResults">
         {% for entry in dbQuery %}
-            <p>{{ entry[0] }}</p>
+            <a href="books/{{ entry[0] }}">{{ entry[0] }}</a>
             <p>By {{ entry[1] }}</p>
             <br>
         {% endfor %}

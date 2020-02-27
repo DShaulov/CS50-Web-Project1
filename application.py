@@ -5,7 +5,7 @@ from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug import generate_password_hash, check_password_hash
-from helpers import capitalizeAll
+from helpers import capitalizeAll, grRequest
 
 
 app = Flask(__name__)
@@ -88,3 +88,12 @@ def search():
                             {"searchParam": "%"+searchParam+"%"}).fetchall()
         print(dbQuery)
         return render_template("search.html", dbQuery=dbQuery)
+
+@app.route("/books/<string:book>")
+def books(book):
+    bookName = book
+    details = db.execute("SELECT * FROM books WHERE title = :title", {"title": bookName}).fetchall()
+    isbn = db.execute("SELECT isbn FROM books WHERE title = :title", {"title": bookName}).fetchall()
+    ratings = grRequest(isbn[0][0])
+    print(ratings)
+    return render_template("books.html", details=details, ratings=ratings)

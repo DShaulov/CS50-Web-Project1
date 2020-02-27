@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Book Info
+{% endblock %}
+
+{% block body %}
+<br>
+<br>
+    <div style="text-align: center; background-color: burlywood;" class="col-4 offset-4">  
+        <br>
+        <h1>{{ details[0][1] }}</h1>
+        <br>
+        <h3>Author: {{ details[0][2] }}</h3>
+        <h3>Year Published: {{ details[0][3] }}</h3>
+        <h3>ISBN: {{ details[0][0] }}</h3>
+        <br>
+        <h3>Average Rating: {{ ratings[1] }}</h3>
+        <h3>Number Of Ratings: {{ ratings[0] }}</h3>
+        <br>
+
+    </div>
+{% endblock %}
