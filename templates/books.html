@@ -8,7 +8,7 @@
 <br>
 <br>
     <div style="text-align: center; background-color: burlywood;" class="col-4 offset-4">
-        <form action="{{ url_for('books') }}" method=>
+        <form action="{{ url_for('reviewPost') }}" method="POST">
             <br>
             <h1 style="color: blue;">{{ details[0][1] }}</h1>
             <br>
@@ -19,8 +19,23 @@
             <h3>Average Rating: {{ ratings[1] }}</h3>
             <h3>Number Of Ratings: {{ ratings[0] }}</h3>
             <br>
+            <input type="text" value='{{ details[0][1] }}' name="title" id="title" hidden="true">
+            <input type="text" value='{{ details[0][0] }}' name="isbn" id="isbn" hidden="true">
             <input type="submit" value="Leave a review" class="btn btn-primary">
             <br><br>
+            <p class="error">{{ errorMulti }}</p>
+            <br>
         </form>
+    </div>
+    <br>    
+    <br>
+    <div style="text-align: center; background-color: burlywood;" class="col-4 offset-4">
+        {% for review in reviews %}
+            <br>
+            <h3>By {{ review[0] }}</h3>
+            <h5>{{ review[2]}}/5 </h5>
+            <h5>{{ review[1] }}</h5>
+            <br>
+        {% endfor %}
     </div>
 {% endblock %}

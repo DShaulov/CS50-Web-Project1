@@ -89,18 +89,18 @@ def search():
         print(dbQuery)
         return render_template("search.html", dbQuery=dbQuery)
 
-@app.route("/books/<string:book>", methods=['GET', 'POST'])
+@app.route("/books/<string:book>", methods=['GET'])
 def books(book):
     if request.method == "GET":
         bookName = book
         details = db.execute("SELECT * FROM books WHERE title = :title", {"title": bookName}).fetchall()
         isbn = db.execute("SELECT isbn FROM books WHERE title = :title", {"title": bookName}).fetchall()
+        reviews = db.execute("SELECT username,review,rating FROM users INNER JOIN review ON users.id = review.id WHERE isbn= :isbn",
+                            {"isbn": isbn[0][0]}).fetchall()
+        print(reviews)
         ratings = grRequest(isbn[0][0])
         print(ratings)
-        return render_template("books.html", details=details, ratings=ratings)
-
-    if request.method == "POST":
-        return render_template("review.html")
+        return render_template("books.html", details=details, ratings=ratings, reviews=reviews)
 
 @app.route("/review", methods=["POST", "GET"])
 def review():
@@ -108,7 +108,33 @@ def review():
         return render_template("review.html")
 
     if request.method == "POST":
-        print("The form content is: " + request.form.get("review"))
-        print("The rating is: " + request.form.get('rating'))
+        db.execute("INSERT INTO review (id, review, rating, isbn) VALUES (:ids, :review, :rating, :isbn)",
+                    {"ids": session["user_id"], "review": request.form.get("review"), "rating": request.form.get("rating"),
+                    "isbn": request.form.get("isbn")})
+        db.commit()
         thankyou = "Thank you for submitting a review"
         return render_template("search.html", thankyou=thankyou)
+
+@app.route("/reviewpost", methods=["POST"])
+def reviewPost():
+    isbn = request.form.get("isbn")
+    print(isbn)
+    userReviews = db.execute("SELECT username,review,rating FROM users INNER JOIN review ON users.id = review.id WHERE isbn= :isbn AND users.id= :ids",
+                            {"isbn": isbn, "ids": session['user_id']}).fetchall()
+    print(userReviews)
+
+    if userReviews != []:
+        title = request.form.get("title")
+        bookName = title
+        details = db.execute("SELECT * FROM books WHERE title = :title", {"title": bookName}).fetchall()
+        isbn = db.execute("SELECT isbn FROM books WHERE title = :title", {"title": bookName}).fetchall()
+        reviews = db.execute("SELECT username,review,rating FROM users INNER JOIN review ON users.id = review.id WHERE isbn= :isbn",
+                            {"isbn": isbn[0][0]}).fetchall()
+        ratings = grRequest(isbn[0][0])
+        errorMulti = "*you already reviewed this book"
+        return render_template("books.html", details=details, ratings=ratings, reviews=reviews, errorMulti=errorMulti)
+        
+
+
+
+    return render_template("review.html", isbn=isbn)
