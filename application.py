@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request, redirect
+from flask import Flask, session, render_template, request, redirect, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -138,3 +138,26 @@ def reviewPost():
 
 
     return render_template("review.html", isbn=isbn)
+
+
+@app.route("/api/<string:isbn>")
+def apiRequest(isbn):
+
+    # Check that book exists
+    bookCheck = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
+    if bookCheck == []:
+        return 404
+    ratings = grRequest(isbn)
+    response = {
+        "title": bookCheck[0][1],
+        "author": bookCheck[0][2],
+        "publication date": bookCheck[0][3],
+        "ISBN number": bookCheck[0][0],
+        "review count": ratings[0],
+        "average score": ratings[1]
+    }
+    return jsonify(response)
+
+@app.route("/api")
+def api():
+    return render_template("api.html")
